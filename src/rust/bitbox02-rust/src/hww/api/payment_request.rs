@@ -375,12 +375,12 @@ pub fn validate_eth(
     output_value: &BigUint,
     output_address: &str,
 ) -> Result<(), ValidationError> {
-    let output_value = output_value.to_bytes_be();
+    let output_value = output_value.to_bytes_le();
     if output_value.len() > 32 {
         return Err(ValidationError::Other);
     }
     let mut output_value_padded = [0u8; 32];
-    output_value_padded[32 - output_value.len()..].copy_from_slice(&output_value);
+    output_value_padded[..output_value.len()].copy_from_slice(&output_value);
     validate_common(
         hal,
         coin_params.slip44(),
